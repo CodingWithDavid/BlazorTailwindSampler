@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\CodingWithDavid\Respoitories\BlazorTailwindSampler\BlazorTailwindSampler\Shared\BlazorTailwindSampler.Shared.csproj" />
+    <ProjectReference Include="..\Shared\BlazorTailwindSampler.Shared.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
