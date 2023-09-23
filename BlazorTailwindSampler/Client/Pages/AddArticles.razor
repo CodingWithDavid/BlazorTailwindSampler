@@ -1,0 +1,115 @@
+﻿@page "/articles"
+@layout NoLayout
+
+@inject CacheService service
+@inject HttpClient Http
+
+
+<!-- Background Container -->
+<div class="flex-col bg-zinc-700 h-screen">
+    <!-- Header Section -->
+    <div class="container flex mx-auto p-6 bg-green-900 bg-gradient-to-l from-green-600 h-60">
+        <!--Avator and title-->
+        <div class="flex-col">
+            <div class="flex-col rounded-full w-40 h-40">
+                <img src="images/WorkAvitor.png" alt="coding with David" />
+            </div>
+            <h3 class="p text-white text-lg">
+                Coding with David
+            </h3>
+        </div>
+
+        <!--Main title-->
+        <div class="flex text-4xl text-gray-300 items-center justify-center mx-auto sm:text-5xl md:text-6xl lg:text-8xl">
+            TailWind Sampler
+        </div>
+    </div>
+
+    <!-- Newsletter Section -->
+    <section id="newsletter" class="bg-zinc-400 p-8 m-8">
+        <!-- Main Container -->
+        <div class="mx-auto py-24">
+            <h2 class="px-3 mb-6 text-3xl font-semibold text-center text-white md:text-4xl">
+                Add New Article to the system
+            </h2>
+
+            <!-- Form -->
+            <form class="flex flex-col items-start justify-center max-w-2xl mx-auto space-y-6 text-base px-6">
+                <!-- Input & Button Container -->
+                <div class="flex flex-col justify-between items-center mx-auto ">
+                    <input type="text"
+                           class="flex-1 px-6 pt-3 pb-2 rounded-lg border-1 border-white focus:outline-none md:mr-3 md:mb-0"
+                           placeholder="Enter Title" @bind=data.Title/>
+                </div>
+                <div class="flex flex-col justify-between items-center mx-auto ">
+                    <input type="text"
+                           class="flex-1 px-6 pt-3 pb-2 mb-2 rounded-lg border-1 border-white focus:outline-none md:mr-3 md:mb-0"
+                           placeholder="Enter Description" @bind=data.Description />
+                </div>
+                <div class="flex flex-col justify-between items-center mx-auto">
+                    <input type="text"
+                           class="flex-1 px-6 pt-3 pb-2 mb-2 rounded-lg border-1 border-white focus:outline-none md:mr-3 md:mb-0"
+                           placeholder="Enter Category" @bind=data.Category />
+                </div>
+                <div class="flex flex-col justify-between items-center mx-auto">
+                    <input type="text"
+                           class="flex-1 px-6 pt-3 pb-2 mb-2 rounded-lg border-1 border-white focus:outline-none md:mr-3 md:mb-0"
+                           placeholder="Enter URL" @bind=data.URL />
+                </div>
+                <div class="flex flex-col justify-between items-center mx-auto">
+                    <input type="text"
+                           class="flex-1 px-6 pt-3 pb-2 mb-2 rounded-lg border-1 border-white focus:outline-none md:mr-3 md:mb-0"
+                           placeholder="Enter Source" @bind=data.Source/>
+                </div>
+                <div class="flex flex-col justify-between items-center mx-auto">
+                    <button type="button" class="text-white bg-green-900 bg-gradient-to-l from-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-cyan-300 dark:focus:ring-cyan-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2 mx-auto" @onclick="AddArticle">Add Article</button>
+                </div>
+
+            </form>
+        </div>
+    </section>
+</div>
+
+@code{
+    private Article data = new Article();
+
+    private async Task AddArticle()
+    {
+        var errors = data.Validate();
+
+        if (errors.Count == 0)
+        {
+            //add the article on the server
+            var response = await Http.PostAsJsonAsync("Article", data);
+
+            if (response.IsSuccessStatusCode)
+            {
+                try
+                {
+                    APIResponse? apiResponse = await response.Content.ReadFromJsonAsync<APIResponse>();
+                    if (apiResponse != null && apiResponse.Success)
+                    {
+                        data.Id = apiResponse.NewValue;
+                        service.Articles.Add(data);
+                        // Handle success
+                        Console.WriteLine("User posted successfully!");
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            else
+            {
+                // Handle failure
+                Console.WriteLine("Error posting user.");
+            }
+            data = new Article();
+        }
+        else
+        {
+            //show errors
+        }
+    }
+}

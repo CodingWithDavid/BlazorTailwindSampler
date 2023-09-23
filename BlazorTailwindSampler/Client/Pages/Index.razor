@@ -1,0 +1,96 @@
+﻿@page "/"
+@layout NoLayout
+
+@inject CacheService CacheService
+@inject HttpClient Http
+
+<!-- Background Container -->
+<div class="flex-col bg-zinc-700">
+    <!-- Header Section -->
+    <div class="container flex mx-auto p-6 bg-green-900 bg-gradient-to-l from-green-600 h-60">
+        <!--Avator and title-->
+        <div class="flex-col">
+            <div class="flex-col rounded-full w-40 h-40">
+                <img src="images/WorkAvitor.png" alt="coding with David" />
+            </div>
+            <h3 class="pl-2 text-white text-3xl font-fugg">
+                Coding with David
+            </h3>
+        </div>
+
+        <!--Main title-->
+        <div class="flex text-2xl text-gray-300 items-center justify-center mx-auto sm:text-4xl md:text-5xl lg:text-7xl">
+            TailWindcss Sampler
+        </div>
+
+    </div>
+
+    <!-- Main Section -->
+    <!--<div class="grid grid-cols-3 grid-rows-4 gap-4 w-100 bg-gray-100">-->
+    <div class="grid md:grid-cols-5 md:grid-rows-4 gap-4 p-6 mx-auto ">
+        <div class="flex-col items-center justify-center p-4 border border-blue-600 bg-gradient-to-r from-cyan-500 to-blue-500">
+            <!-- Title -->
+            <span class="text-white text-2xl">Center Items</span>
+            <!-- Description -->
+            <p class="text-gray-200 text-sm">
+                In order to center items along the x-axis you just need to do "mx-auto"
+            </p>
+
+            <!-- Type -->
+        </div>
+        <div class="p-10 border border-blue-600 bg-blue-100">02</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">03</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">04</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">05</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">06</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">07</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">08</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">09</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">01</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">02</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">03</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">04</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">05</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">06</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">07</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">08</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">09</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">01</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">02</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">03</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">04</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">05</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">06</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">07</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">08</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">09</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">01</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">02</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">03</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">04</div>
+        <div class="p-10 border border-blue-600 bg-blue-100">05</div>
+    </div>
+</div>
+
+@code{
+
+    private List<Article> articles = new List<Article>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<List<Article>>("Article");
+            if (result != null)
+            {
+                CacheService.Articles = result;
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+}
+
